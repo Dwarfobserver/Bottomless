@@ -1,7 +1,11 @@
 
+/// Provides informations on the build environment in the build namespace.
+
 #pragma once
 
 namespace build {
+
+    /// The project version.
 
     constexpr int version_major = BTL_VERSION_MAJOR;
     constexpr int version_minor = BTL_VERSION_MINOR;
@@ -19,7 +23,7 @@ namespace build {
     #elif defined(NDEBUG)
     constexpr int current_mode = mode::release;
     #else
-    #error Current build mode could not be detected
+    #error Current build mode could not be detected.
     #endif
 
     /// The build target can be the common library, the client, the server or the tests.
@@ -41,7 +45,7 @@ namespace build {
     #elif defined(BTL_TESTS_TARGET)
     constexpr int current_target = target::tests;
     #else
-    #error Current build target could not be detected
+    #error Current build target could not be detected.
     #endif
 
     /// The resource path is the root of files neeed by the program.
@@ -53,4 +57,5 @@ namespace build {
     char const* resources_path = nullptr;
     constexpr bool has_resources = false;
     #endif
+
 }
