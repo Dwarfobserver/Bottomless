@@ -1,14 +1,23 @@
 
 #include <iostream>
-#include <client_header.hpp>
+#include <utility.hpp>
+
+namespace {
+    void check_environment() {
+        ASSERT(build::current_target == build::target::client, "Wrong current target");
+        ASSERT(build::has_resources, "Has the resources path");
+    }
+}
 
 int main() {
-    char const* me = build::current_target == build::target::client
-        ? "client" : build::current_target == build::target::server
-        ? "server" : build::current_target == build::target::tests
-        ? "tests"  : "unknown";
-
-    std::cout << "Hello " << me << " !\n";
-    std::cout << "In debug ? " << (build::current_mode == build::mode::debug) << "\n";
-    std::cout << "Resources path = " << build::resources_path << "\n";
+    auto waitInput = defer([] { std::cin.get(); });
+    try {
+        check_environment();
+        std::cout << "Bottomless client v" << build::version_string
+                  << " (" << build::mode_string << ")\n";
+    }
+    catch(std::exception& e) {
+        std::cout << "Error\n" << e.what() << '\n';
+        return 1;
+    }
 }

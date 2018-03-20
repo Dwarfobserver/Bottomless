@@ -1,9 +1,7 @@
 
 # Root CMakeLists.txt
 
-# To avoid building tests, add -DNO_TESTS=1
-
-# To accelerate test building, we could make client and server static libraries for tests
+# TODO To avoid building tests, add -DNO_TESTS=1
 
 project(bottomless)
 cmake_minimum_required(VERSION 3.6)
@@ -59,14 +57,17 @@ add_definitions(
 )
 
 # Put the executables in the bin directory
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${CMAKE_BINARY_DIR}/bin)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR}/bin)
 
-# Add the common code part, the client, the server and optionally the tests
+set(EXECUTABLES_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${EXECUTABLES_DIRECTORY})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${EXECUTABLES_DIRECTORY})
+
+# Add the common code part, the client, the server with their tests
+
+set(TESTS_HEADERS "${CMAKE_SOURCE_DIR}/dependencies/catch2/include")
+
+enable_testing()
 
 add_subdirectory(common)
 add_subdirectory(client)
 add_subdirectory(server)
-if (NOT NO_TESTS)
-    add_subdirectory(tests)
-endif()

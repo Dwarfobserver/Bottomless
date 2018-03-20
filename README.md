@@ -14,6 +14,13 @@ Ideally, I'd like it to have these properties :
  - arcade platform collision
  - further improvements on lag
 
+### Build the project
+
+cd build
+cmake ../..
+cmake --build .
+ctest
+
 ### Project organisation
 
 The project is built with cmake.

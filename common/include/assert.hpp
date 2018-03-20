@@ -6,6 +6,7 @@
 
 #include <build_info.hpp>
 #include <string>
+#include <stdexcept>
 
 class assert_error : public std::runtime_error {
 public:
@@ -29,5 +30,5 @@ namespace detail {
 #else
     #define ASSERT(predicate, message) static_cast<void>( \
                 static_cast<bool>(predicate) || \
-                (sc::detail::assert_failed(#predicate, __FILE__, static_cast<int>(__LINE__), message), 0))
+                (detail::assert_failed(#predicate, __FILE__, static_cast<int>(__LINE__), message), 0))
 #endif
