@@ -10,14 +10,15 @@ namespace {
 }
 
 int main() {
+    std::cout << "Bottomless -- client v" << build::version_string
+              << " (" << build::mode_string << ")\n";
+
     auto waitInput = defer([] { std::cin.get(); });
     try {
         check_environment();
-        std::cout << "Bottomless client v" << build::version_string
-                  << " (" << build::mode_string << ")\n";
     }
     catch(std::exception& e) {
-        std::cout << "Error\n" << e.what() << '\n';
+        std::cout << "Exception caught :\n" << e.what() << '\n';
         return 1;
     }
 }

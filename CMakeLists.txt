@@ -21,29 +21,24 @@ endif()
 # Add compiler-specific flags
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    add_compile_options(
-#        "/W4 /std:c++latest"
-#        "$<$<CONFIG:RELASE>:/Ox>"
-    )
-    message(STATUS "Using MSVC")
+    message(FATAL_ERROR "MSVC is not supported")
 elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR
        ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
     add_compile_options(
 #        "-Wall -std=c++17"
 #        "$<$<CONFIG:RELASE>:-O3>"
     )
-    message(STATUS "Using G++ or Clang")
 else()
-    message(FATAL_ERROR "Compiler not supported (it must be MSVC, GCC or Clang on Windows or Linux")
+    message(FATAL_ERROR "Compiler not supported (it must be GCC or Clang, on Windows or Linux")
 endif()
 
 # Add mode-specific definitions
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message(STATUS "In debug mode")
+    message(STATUS "Debug mode")
     add_definitions(-D_DEBUG)
 else()
-    message(STATUS "In release mode")
+    message(STATUS "Release mode")
     add_definitions(-DNDEBUG)
 endif()
 

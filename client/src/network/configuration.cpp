@@ -1,5 +1,5 @@
 
-#include <net/configuration.hpp>
+#include <network/configuration.hpp>
 
 namespace net {
 

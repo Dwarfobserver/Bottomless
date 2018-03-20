@@ -27,7 +27,7 @@ ctest
 
 ### Project organisation
 
-The project is built with cmake.
+The project is built with cmake and gcc or clang (msvc is not supported).
 There is three main parts :
 
  - The common code

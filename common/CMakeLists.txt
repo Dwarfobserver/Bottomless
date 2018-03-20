@@ -39,4 +39,4 @@ set(COMMON_MACROS
     BTL_COMMON_TARGET
 )
 target_compile_definitions(common PRIVATE ${COMMON_MACROS})
-target_compile_definitions(common_tests PRIVATE ${SERVER_MACROS})
+target_compile_definitions(common_tests PRIVATE ${COMMON_MACROS})

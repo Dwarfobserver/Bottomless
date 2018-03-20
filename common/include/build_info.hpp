@@ -3,8 +3,6 @@
 
 #pragma once
 
-#define AS_STRING(value) #value
-
 namespace build { // TODO Add constexpr char const* version, target, mode strings.
 
     /// The project version.
@@ -12,8 +10,14 @@ namespace build { // TODO Add constexpr char const* version, target, mode string
     constexpr int version_major = BTL_VERSION_MAJOR;
     constexpr int version_minor = BTL_VERSION_MINOR;
 
+#define AS_EXPANDED_STRING(value) AS_STRING(value)
+#define AS_STRING(value) #value
+
     constexpr char const* version_string =
-        AS_STRING(BTL_VERSION_MAJOR) "." AS_STRING(BTL_VERSION_MINOR);
+        AS_EXPANDED_STRING(BTL_VERSION_MAJOR) "." AS_EXPANDED_STRING(BTL_VERSION_MINOR);
+
+#undef AS_EXPANDED_STRING
+#undef AS_STRING
 
     /// The build mode indicates if it is in debug or release mode.
 
@@ -33,14 +37,13 @@ namespace build { // TODO Add constexpr char const* version, target, mode string
     #error Current build mode could not be detected.
     #endif
 
-    /// The build target can be the common library, the client, the server or the tests.
+    /// The build target can be the common library, the client or the server.
 
     namespace target {
         enum {
             common,
             client,
-            server,
-            tests
+            server
         };
     }
     #if   defined(BTL_COMMON_TARGET)
@@ -52,9 +55,6 @@ namespace build { // TODO Add constexpr char const* version, target, mode string
     #elif defined(BTL_SERVER_TARGET)
     constexpr int current_target = target::server;
     constexpr char const* target_string = "server";
-    #elif defined(BTL_TESTS_TARGET)
-    constexpr int current_target = target::tests;
-    constexpr char const* target_string = "tests";
     #else
     #error Current build target could not be detected.
     #endif

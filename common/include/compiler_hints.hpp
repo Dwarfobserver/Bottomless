@@ -7,9 +7,9 @@
 #include <assert.hpp>
 #endif
 
-/// Ensures that the compiler is supported (clang, gcc or msvc).
+/// Ensures that the compiler is supported (clang or gcc).
 
-#if !defined(__clang__) && !defined(__GNUG__) && !defined(_MSC_VER)
+#if !defined(__clang__) && !defined(__GNUG__)
 #error The compiler used is not supported.
 #endif
 
