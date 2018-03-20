@@ -24,12 +24,14 @@ ctest
 ### Project organisation
 
 The project is built with cmake.
-There is four targets :
+There is three main parts :
 
- - The common part, created as a static library
- - The client executable
- - The server executable
- - The tests executable
+ - The common code
+ - The client
+ - The server
+
+Each part has a static library and a test executable associated.
+The client and the server also generate their executables.
 
 The dependencies folder stores all external code used, apart from the C++ standard library.
 
