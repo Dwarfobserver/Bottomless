@@ -1,0 +1,26 @@
+
+dist: trusty
+sudo: required
+language: cpp
+compiler: gcc
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-7
+      - g++-7
+      - cmake
+before_install:
+  - ln -s /usr/bin/gcc-7 /usr/local/bin/gcc
+  - ln -s /usr/bin/g++-7 /usr/local/bin/g++
+install:
+  - export CC=/usr/bin/gcc-7
+  - export CXX=/usr/bin/g++-7
+  - gcc -v && g++ -v && cmake --version
+script:
+  - mkdir -p build
+  - cd build
+  - cmake .. 
+  - cmake --build .
+  - ctest
