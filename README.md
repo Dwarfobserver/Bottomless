@@ -1,4 +1,6 @@
 
+[![Build Status](https://travis-ci.org/Dwarfobserver/Bottomless.svg?branch=master)](https://travis-ci.org/Dwarfobserver/Bottomless)
+
 # Bottomless
 
 This is a personal project for a game.
@@ -16,10 +18,12 @@ Ideally, I'd like it to have these properties :
 
 ### Build the project
 
+```
 cd build
 cmake ../..
 cmake --build .
 ctest
+```
 
 ### Project organisation
 
