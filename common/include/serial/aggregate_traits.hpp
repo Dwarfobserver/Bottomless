@@ -43,7 +43,7 @@ namespace traits {
         template <class T, unsigned I>
         constexpr int arity_of_rec() {
             static_assert(I < max_arity, "");
-            if constexpr (!traits::is_brace_constructible<T, I + 1>) {
+            if constexpr (!::traits::is_brace_constructible<T, I + 1>) {
                 return I;
             }
             else {
