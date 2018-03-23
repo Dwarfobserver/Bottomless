@@ -32,17 +32,19 @@ target_link_libraries(server common server_lib)
 
 # Make the tests
 
-add_executable(server_tests
-    ${TESTS_SOURCES})
+if (NOT NO_TESTS)
+    add_executable(server_tests
+        ${TESTS_SOURCES})
 
-target_include_directories(server_tests PUBLIC
-    ${TESTS_HEADERS}
-    ${COMMON_HEADERS}
-    ${SERVER_HEADERS})
+    target_include_directories(server_tests PUBLIC
+        ${TESTS_HEADERS}
+        ${COMMON_HEADERS}
+        ${SERVER_HEADERS})
 
-target_link_libraries(server_tests common server_lib)
+    target_link_libraries(server_tests common server_lib)
 
-add_test(server "${EXECUTABLES_DIRECTORY}/server_tests")
+    add_test(server "${EXECUTABLES_DIRECTORY}/server_tests")
+endif()
 
 # Add server macros
 
@@ -52,4 +54,6 @@ set(SERVER_MACROS
 )
 target_compile_definitions(server PRIVATE ${SERVER_MACROS})
 target_compile_definitions(server_lib PRIVATE ${SERVER_MACROS})
-target_compile_definitions(server_tests PRIVATE ${SERVER_MACROS})
+if (NOT NO_TESTS)
+    target_compile_definitions(server_tests PRIVATE ${SERVER_MACROS})
+endif()

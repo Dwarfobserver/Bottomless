@@ -22,16 +22,18 @@ target_include_directories(common PUBLIC
 
 # Make the tests
 
-add_executable(common_tests
-    ${TESTS_SOURCES})
+if (NOT NO_TESTS)
+    add_executable(common_tests
+        ${TESTS_SOURCES})
 
-target_include_directories(common_tests PUBLIC
-    ${TESTS_HEADERS}
-    ${COMMON_HEADERS})
+    target_include_directories(common_tests PUBLIC
+        ${TESTS_HEADERS}
+        ${COMMON_HEADERS})
 
-target_link_libraries(common_tests common)
+    target_link_libraries(common_tests common)
 
-add_test(common "${EXECUTABLES_DIRECTORY}/common_tests")
+    add_test(common "${EXECUTABLES_DIRECTORY}/common_tests")
+endif()
 
 # Specific macros
 
@@ -39,4 +41,6 @@ set(COMMON_MACROS
     BTL_COMMON_TARGET
 )
 target_compile_definitions(common PRIVATE ${COMMON_MACROS})
-target_compile_definitions(common_tests PRIVATE ${COMMON_MACROS})
+if (NOT NO_TESTS)
+    target_compile_definitions(common_tests PRIVATE ${COMMON_MACROS})
+endif()

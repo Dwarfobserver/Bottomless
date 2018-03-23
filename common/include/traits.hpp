@@ -10,25 +10,56 @@ namespace traits {
 
     /// Used to retrieve classes from an overload or a specialization.
 
-    template <class...Args>
+    template <class T>
+    struct type_tag {
+        using type = T;
+    };
+
+    template <class...Ts>
     struct types_tag {};
 
-    /// Used to create a sequence of voids in type_tag.
+    /// Same for constexpr values.
+
+    template <auto arg>
+    struct value_tag {
+        static constexpr auto value = arg;
+    };
+
+    // Used to create a sequence of classes in a tag.
 
     namespace detail {
-        template <int I, class...Vs>
-        struct void_tag_rec {
-            using type = typename void_tag_rec<I - 1, void, Vs...>::type;
+        template <int I, class...Ts>
+        struct make_types_tag;
+        template <int I, class T, class...Ts>
+        struct make_types_tag<I, T, Ts...> {
+            using type = make_types_tag<I - 1, T, T, Ts...>;
         };
-
-        template <class...Vs>
-        struct void_tag_rec<0, Vs...> {
-            using type = types_tag<Vs...>;
+        template <class...Ts>
+        struct make_types_tag<0, Ts...> {
+            using type = types_tag<Ts...>;
         };
     }
 
-    template <unsigned N>
-    using make_voids_tag = typename detail::void_tag_rec<N>::type;
+    template <class T, unsigned N>
+    using make_types_tag = typename detail::make_types_tag<N, T>;
+
+    // Used to create a sequence of values in a tag.
+
+    namespace detail {
+        template <int I, auto...args>
+        struct make_types_tag;
+        template <int I, auto arg, auto...args>
+        struct make_types_tag<I, arg, args...> {
+            using type = make_types_tag<I - 1, arg, arg, args...>;
+        };
+        template <auto...args>
+        struct make_types_tag<0, args...> {
+            using type = types_tag<args...>;
+        };
+    }
+
+    template <auto arg, unsigned N>
+    using make_values_tag = typename detail::make_types_tag<N, T>;
 
     /// Used to represent any class.
 
@@ -48,24 +79,5 @@ namespace traits {
 
     template <class = void>
     static constexpr const wildcard any{};
-
-    /// Detects if an expression is valid.
-
-    namespace detail {
-        template <class SFINAE, template <class...> class Expr, class...Ts>
-        struct is_valid {
-            static constexpr bool value = false;
-        };
-        template <template <class...> class Expr, class...Ts>
-        struct is_valid<std::void_t<
-            Expr<Ts...>
-        >, Expr, Ts...> {
-            static constexpr bool value = true;
-        };
-    }
-
-    template <template <class...> class Expr, class...Ts>
-    constexpr bool is_valid =
-        detail::is_valid<void, Expr, Ts...>::value;
 
 }

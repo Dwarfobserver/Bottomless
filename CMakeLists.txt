@@ -11,11 +11,23 @@ set(CMAKE_CXX_STANDARD 17)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Debug)
+    message(STATUS "Debug mode (specified by -DCMAKE_BUILD_TYPE=Debug or Release)")
 else()
-    if ((NOT (CMAKE_BUILD_TYPE MATCHES Debug)) AND 
-        (NOT (CMAKE_BUILD_TYPE MATCHES Release)))
-    message(FATAL_ERROR "Only Debug and Release CMAKE_BUILD_TYPE are supported (default = Debug)")
+    if    (CMAKE_BUILD_TYPE MATCHES Debug)
+        message(STATUS "Debug mode")
+    elseif(CMAKE_BUILD_TYPE MATCHES Release)
+        message(STATUS "Release mode")
+    else()
+        message(FATAL_ERROR "Only Debug and Release CMAKE_BUILD_TYPE are supported (default = Debug)")
     endif()
+endif()
+
+# Check if tests are built (yes by default)
+
+if (NOT NO_TESTS)
+    message(STATUS "Tests enabled (they can be disabled with -DNO_TESTS=1)")
+else()
+    message(STATUS "Tests disabled")
 endif()
 
 # Add compiler-specific flags
@@ -35,10 +47,8 @@ endif()
 # Add mode-specific definitions
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-    message(STATUS "Debug mode")
     add_definitions(-D_DEBUG)
 else()
-    message(STATUS "Release mode")
     add_definitions(-DNDEBUG)
 endif()
 
@@ -61,7 +71,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${EXECUTABLES_DIRECTORY})
 
 set(TESTS_HEADERS "${CMAKE_SOURCE_DIR}/dependencies/catch2/include")
 
-enable_testing()
+if (NOT NO_TESTS)
+    enable_testing()
+endif()
 
 add_subdirectory(common)
 add_subdirectory(client)

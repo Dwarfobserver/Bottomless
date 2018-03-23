@@ -33,7 +33,7 @@ namespace traits {
 
     template <class T, unsigned N>
     constexpr bool is_brace_constructible =
-        detail::is_brace_constructible<void, T, make_voids_tag<N>>::value;
+        detail::is_brace_constructible<void, T, make_types_tag<N, void>>::value;
 
     /// Gives the arity of a type (the number of elements which construct him).
     /// If he isn't an aggregate type, returns -1.

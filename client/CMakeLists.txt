@@ -32,17 +32,19 @@ target_link_libraries(client common client_lib)
 
 # Make the tests
 
-add_executable(client_tests
-    ${TESTS_SOURCES})
+if (NOT NO_TESTS)
+    add_executable(client_tests
+        ${TESTS_SOURCES})
 
-target_include_directories(client_tests PUBLIC
-    ${TESTS_HEADERS}
-    ${COMMON_HEADERS}
-    ${CLIENT_HEADERS})
+    target_include_directories(client_tests PUBLIC
+        ${TESTS_HEADERS}
+        ${COMMON_HEADERS}
+        ${CLIENT_HEADERS})
 
-target_link_libraries(client_tests common client_lib)
+    target_link_libraries(client_tests common client_lib)
 
-add_test(client "${EXECUTABLES_DIRECTORY}/client_tests")
+    add_test(client "${EXECUTABLES_DIRECTORY}/client_tests")
+endif()
 
 # Add client macros
 
@@ -52,4 +54,7 @@ set(CLIENT_MACROS
 )
 target_compile_definitions(client PRIVATE ${CLIENT_MACROS})
 target_compile_definitions(client_lib PRIVATE ${CLIENT_MACROS})
-target_compile_definitions(client_tests PRIVATE ${CLIENT_MACROS})
+if (NOT NO_TESTS)
+    target_compile_definitions(client_tests PRIVATE ${CLIENT_MACROS})
+endif()
+
