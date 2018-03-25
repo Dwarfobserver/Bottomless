@@ -1,4 +1,6 @@
 
+/// serial::in_base<Serializer> and serial::in_base<Serializer> are CRTP base classes for
+
 #pragma once
 
 #include <serial/base_traits.hpp>
@@ -6,8 +8,8 @@
 
 namespace serial {
 
-    /// in_access and out_access are the types exposing operator& for directly (de)serializable types.
-    /// out_access ignore decorators by default.
+    /// in_access and out_access are the types exposing operator& for directly (de)serializable
+    /// types.
 
     namespace detail {
         
@@ -16,7 +18,7 @@ namespace serial {
             Serializer& span;
 
             template <class T, class = std::enable_if_t<
-                traits::is_deserializable<Serializer, T>
+                traits::is_directly_deserializable<Serializer, T>
             >>
             in_access& operator&(T& data) {
                 span.deserialize(data);
@@ -32,7 +34,7 @@ namespace serial {
             static constexpr bool is_serializable = false;
 
             template <class T, class = std::enable_if_t<
-                traits::is_serializable<Serializer, T>
+                traits::is_directly_serializable<Serializer, T>
             >>
             out_access& operator&(T& data) {
                 span.serialize(const_cast<T const&>(data));
@@ -40,7 +42,7 @@ namespace serial {
             }
             
             template <class T, class = std::enable_if_t<
-                !traits::is_serializable<Serializer, T>
+                !traits::is_directly_serializable<Serializer, T>
             >>
             out_access& operator&(decorator<T>& data) {
                 return *this;

@@ -16,7 +16,7 @@ class binary_serializer :
 public:
     char* bytes;
     binary_serializer(char* bytes = nullptr) : bytes(bytes) {}
-private:
+//private:
     template <class T, class = std::enable_if_t<
         std::is_trivially_copyable_v<T>
     >>
@@ -36,7 +36,7 @@ private:
     }
 };
 
-/// Wrap a stream object which can serialize objects. TODO Make serialize functions privates
+/// Wrap a stream object which can serialize objects. TODO Make serialize functions privates.
 
 template <class Stream = std::iostream>
 struct stream_serializer :
@@ -84,7 +84,7 @@ public:
 
     template <class T>
     void serialize(T const& val) {
-        stream << val;
+        stream << spaces << val;
     }
     
     void serialize(serial::separator)   {
