@@ -20,12 +20,12 @@ namespace traits {
 
     /// Same for constexpr values.
 
-    template <auto arg>
+    template <class T, T arg>
     struct value_tag {
         static constexpr auto value = arg;
     };
 
-    template <auto...args>
+    template <class T, T...args>
     struct values_tag {};
 
     // Used to create a sequence of classes in a tag.
@@ -49,20 +49,20 @@ namespace traits {
     // Used to create a sequence of values in a tag.
 
     namespace detail {
-        template <int I, auto...args>
+        template <int I, class T, T...args>
         struct make_values_tag;
-        template <int I, auto arg, auto...args>
-        struct make_values_tag<I, arg, args...> {
-            using type = typename make_values_tag<I - 1, arg, arg, args...>::type;
+        template <int I, class T, T arg, T...args>
+        struct make_values_tag<I, T, arg, args...> {
+            using type = typename make_values_tag<I - 1, T, arg, arg, args...>::type;
         };
-        template <auto arg, auto...args>
-        struct make_values_tag<0, arg, args...> {
-            using type = values_tag<args...>;
+        template <class T, T arg, T...args>
+        struct make_values_tag<0, T, arg, args...> {
+            using type = values_tag<T, args...>;
         };
     }
 
-    template <unsigned N, auto arg>
-    using make_values_tag = typename detail::make_values_tag<N, arg>::type;
+    template <unsigned N, class T, T arg>
+    using make_values_tag = typename detail::make_values_tag<N, T, arg>::type;
 
     /// Used to represent any class.
 
@@ -82,5 +82,23 @@ namespace traits {
 
     template <class = void>
     static constexpr const wildcard any{};
+
+    /// Detect if a type is iterable (with begin() and end() member functions).
+    
+    namespace detail {
+        template <class T, class SFINAE = void>
+        struct is_iterable {
+            static constexpr bool value = false;
+        };
+        template <class T>
+        struct is_iterable<T, std::void_t<decltype(
+            (std::declval<T&>().begin(), std::declval<T&>().end())
+        )>> {
+            static constexpr bool value = true;
+        };
+    }
+
+    template <class T>
+    constexpr bool is_iterable = detail::is_iterable<T>::value;
 
 }

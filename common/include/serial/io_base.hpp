@@ -30,9 +30,6 @@ namespace serial {
         struct out_access {
             Serializer& span;
 
-            template <class T, class SFINAE = void>
-            static constexpr bool is_serializable = false;
-
             template <class T, class = std::enable_if_t<
                 traits::is_directly_serializable<Serializer, T>
             >>

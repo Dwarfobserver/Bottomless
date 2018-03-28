@@ -7,7 +7,7 @@ This is a personal project for a game.
 I use it to test many things.
 Ideally, I'd like it to have these properties :
 
- - cross-platform
+ - cross-platform (linux and windows)
  - multi-threaded
  - 2D specific shaders
  - reusable code (eg. serialization)
@@ -27,7 +27,7 @@ ctest
 
 ### Project organisation
 
-The project is built with cmake and gcc or clang (msvc is not supported).
+The project is built with cmake and msvc, gcc or clang.
 There is three main parts :
 
  - The common code

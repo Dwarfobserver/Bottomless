@@ -30,18 +30,14 @@ else()
     message(STATUS "Tests disabled")
 endif()
 
-# Add compiler-specific flags
+# Check compiler
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    message(FATAL_ERROR "MSVC is not supported")
-elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR
-       ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
-    add_compile_options(
-#        "-Wall -std=c++17"
-#        "$<$<CONFIG:RELASE>:-O3>"
-    )
+if( ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC") OR
+    ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang") OR
+    ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU"))
+# Specific flags go here
 else()
-    message(FATAL_ERROR "Compiler not supported (it must be GCC or Clang, on Windows or Linux")
+    message(FATAL_ERROR "Compiler not supported (it must be MSVC, GCC or Clang")
 endif()
 
 # Add mode-specific definitions

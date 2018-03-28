@@ -4,7 +4,7 @@
 #include <serial/all.hpp>
 
 using namespace std::string_literals;
-
+/*
 TEST_CASE("basic types", "[serialization]") {
     std::stringstream stream;
     using Serializer = stream_serializer<std::stringstream>;
@@ -55,7 +55,7 @@ Serializer& operator&(Serializer& s, Person& p) { // TODO²
              & p.name
              & end_struct_ref();
 }
-
+/*
 TEST_CASE("custom types", "[serialization]") {
     Person person{ Title::mister, "Propre"s };
 
@@ -78,3 +78,4 @@ TEST_CASE("custom types", "[serialization]") {
     "}");
 }
 
+*/

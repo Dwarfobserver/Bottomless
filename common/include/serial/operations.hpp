@@ -2,22 +2,17 @@
 
 #pragma once
 
-#include <serial/io_base.hpp>
-#include <serial/aggregate_traits.hpp>
-/*
+#include <aggregates_to_tuples.hpp>
 
-namespace serial::detail {
+/// Decay char native as a char pointer.
 
+template <class Serializer, int N>
+Serializer& operator&(Serializer& s, char const (& data)[N]) { // TODO string_view of size N ?
+    return s & static_cast<char const*>(data);
 }
 
-template <class Serializer, class T, class = std::enable_if_t<
-    true
->>
-Serializer& operator&(Serializer& s, T& data) {
-
+template <class Serializer, class...Ts>
+Serializer& operator&(Serializer& s, std::tuple<Ts...>& tuple) {
+    
 }
 
-namespace serial::detail {
-
-}
-*/
