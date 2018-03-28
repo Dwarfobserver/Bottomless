@@ -20,6 +20,8 @@ TEST_CASE("build_info", "[environment]") {
 
     CHECK(build::has_resources == false);
 
+    CHECK(build::version_major + build::version_minor > 0);
+
     auto vMajor = std::to_string(build::version_major);
     auto vMinor = std::to_string(build::version_minor);
     CHECK(build::version_string == vMajor + "." + vMinor);

@@ -4,7 +4,7 @@
 #include <serial/all.hpp>
 
 using namespace std::string_literals;
-/*
+
 TEST_CASE("basic types", "[serialization]") {
     std::stringstream stream;
     using Serializer = stream_serializer<std::stringstream>;
@@ -39,23 +39,19 @@ namespace {
     };
 }
 
-template <class Serializer>
-Serializer& operator&(Serializer& s, Title& g) { // TODO Allow rvalue ref binding
-    constexpr auto m = "Mr.";
-    constexpr auto f = "Ms.";
-    return s & (g == Title::mister ? m : f);
+template <class F>
+void visit(Title& title, F&& f) { // TODO Allow rvalue ref binding
+    constexpr auto mister = "Mr.";
+    constexpr auto miss   = "Ms.";
+    f(title == Title::mister ? mister : miss);
 }
 
-template <class Serializer>
-Serializer& operator&(Serializer& s, Person& p) { // TODO²
-    using namespace serial;
-    return s & begin_struct_ref()
-             & p.title
-             & separator_ref()
-             & p.name
-             & end_struct_ref();
+template <class F>
+void visit(Person& p, F&& f) {
+    visit(p.title, f);
+    f(p.name);
 }
-/*
+
 TEST_CASE("custom types", "[serialization]") {
     Person person{ Title::mister, "Propre"s };
 
@@ -65,17 +61,4 @@ TEST_CASE("custom types", "[serialization]") {
 
     serializer << person;
     CHECK(sStream.str() == "Mr.Propre");
-
-    std::ostringstream pStream;
-    using Printer = pretty_printer<std::ostringstream>;
-    Printer printer{ pStream, 4 };
-
-    printer << person;
-    CHECK(pStream.str() ==
-    "{\n"
-    "    Mr.,\n"
-    "    Propre\n"
-    "}");
 }
-
-*/

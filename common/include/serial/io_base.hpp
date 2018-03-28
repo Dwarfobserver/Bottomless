@@ -3,10 +3,39 @@
 
 #pragma once
 
-#include <serial/base_traits.hpp>
+#include <visitors.hpp>
 #include <serial/decorators.hpp>
 
+namespace traits {
+
+    /// Detect if, for a given serializer, a class is (de) serializable.
+
+    template <class Serializer, class T, class SFINAE = void>
+    constexpr bool is_directly_deserializable = false;
+
+    template <class Serializer, class T>
+    constexpr bool is_directly_deserializable<Serializer, T, std::void_t<
+        decltype(std::declval<Serializer&>().deserialize(std::declval<T&>()))
+    >> = true;
+
+
+    template <class Serializer, class T, class SFINAE = void>
+    constexpr bool is_directly_serializable = false;
+
+    template <class Serializer, class T>
+    constexpr bool is_directly_serializable<Serializer, T, std::void_t<
+        decltype(std::declval<Serializer&>().serialize(std::declval<T const&>()))
+    >> = true;
+
+}
+
 namespace serial {
+
+    /// This visitor add decorators. Add custom visitors :
+
+    namespace detail {
+        /// TODO
+    }
 
     /// in_access and out_access are the types exposing operator& for directly (de)serializable
     /// types.
@@ -17,11 +46,25 @@ namespace serial {
         struct in_access {
             Serializer& span;
 
-            template <class T, class = std::enable_if_t<
-                traits::is_directly_deserializable<Serializer, T>
-            >>
+            template <class T>
             in_access& operator&(T& data) {
-                span.deserialize(data);
+                if constexpr (traits::is_directly_deserializable<Serializer, T>) {
+                    span.deserialize(data);
+                }
+                else if constexpr (traits::is_visitable<T>) {
+                    visit(data, [&] (auto& v) {
+                        *this & v;
+                    });
+                }
+                else {
+                    static_assert(false, "The type T cannot be directly deserialized by "
+                                         "the type Serializer, and cannot be visited.");
+                }
+                return *this;
+            }
+
+            template <class T>
+            in_access& operator&(decorator<T>& data) {
                 return *this;
             }
         };
@@ -30,11 +73,20 @@ namespace serial {
         struct out_access {
             Serializer& span;
 
-            template <class T, class = std::enable_if_t<
-                traits::is_directly_serializable<Serializer, T>
-            >>
+            template <class T>
             out_access& operator&(T& data) {
-                span.serialize(const_cast<T const&>(data));
+                if constexpr (traits::is_directly_serializable<Serializer, T>) {
+                    span.serialize(const_cast<T const&>(data));
+                }
+                else if constexpr (traits::is_visitable<T>) {
+                    visit(data, [&] (auto& v) {
+                        *this & v;
+                    });
+                }
+                else {
+                    static_assert(false, "The type T cannot be directly serialized by "
+                                         "the type Serializer, and cannot be visited.");
+                }
                 return *this;
             }
             

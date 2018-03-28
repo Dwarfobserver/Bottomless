@@ -5,7 +5,35 @@
 #include <tuple>
 #include <optional>
 
-/// Visit tuples.
+/// Visit optionals. First occurence of visit, to write the trait is_visitable.
+
+template <class F, class T>
+void visit(std::optional<T>& opt, F&& f) {
+    if (opt) f(*opt);
+}
+
+/// Indicates if a type can be visited.
+
+namespace traits {
+
+    namespace detail {
+        template <class T, class SFINAE = void>
+        struct is_visitable {
+            static constexpr bool value = false;
+        };
+        template <class T>
+        struct is_visitable<T, std::void_t<decltype(
+            visit(std::declval<T&>(), std::declval<float&&>())
+        )>> {
+            static constexpr bool value = true;
+        };
+    }
+    template <class T>
+    constexpr bool is_visitable = detail::is_visitable<T>::value;
+    
+}
+
+/// Visit tuples. TODO Add forward references for data & F
 
 namespace detail {
     template <class F, int I, class...Ts>
@@ -29,11 +57,4 @@ template <class F, class Iterable, class = std::enable_if_t<
 >>
 void visit(Iterable& iterable, F&& f) {
     for (auto& val : iterable) f(val);
-}
-
-/// Visit optionals.
-
-template <class F, class T>
-void visit(std::optional<T>& opt, F&& f) {
-    if (opt) f(*opt);
 }
