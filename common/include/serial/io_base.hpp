@@ -4,7 +4,9 @@
 #pragma once
 
 #include <visitors.hpp>
+#include <aggregates_to_tuples.hpp>
 #include <serial/decorators.hpp>
+#include <stdexcept>
 
 namespace traits {
 
@@ -31,12 +33,6 @@ namespace traits {
 
 namespace serial {
 
-    /// This visitor add decorators. Add custom visitors :
-
-    namespace detail {
-        /// TODO
-    }
-
     /// in_access and out_access are the types exposing operator& for directly (de)serializable
     /// types.
 
@@ -56,9 +52,15 @@ namespace serial {
                         *this & v;
                     });
                 }
+                else if constexpr (traits::is_aggregate<T>) {
+                    auto refs = as_tuple(data);
+                    visit(refs, [&] (auto& v) {
+                        *this & v;
+                    });
+                }
                 else {
-                    static_assert(false, "The type T cannot be directly deserialized by "
-                                         "the type Serializer, and cannot be visited.");
+                    throw std::logic_error{"The type T cannot be directly deserialized by "
+                                           "the type Serializer, and cannot be visited."};
                 }
                 return *this;
             }
@@ -83,9 +85,15 @@ namespace serial {
                         *this & v;
                     });
                 }
+                else if constexpr (traits::is_aggregate<T>) {
+                    auto refs = as_tuple(data);
+                    visit(refs, [&] (auto& v) {
+                        *this & v;
+                    });
+                }
                 else {
-                    static_assert(false, "The type T cannot be directly serialized by "
-                                         "the type Serializer, and cannot be visited.");
+                    throw std::logic_error{"The type T cannot be directly deserialized by "
+                                           "the type Serializer, and cannot be visited."};
                 }
                 return *this;
             }

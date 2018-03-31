@@ -62,3 +62,25 @@ TEST_CASE("custom types", "[serialization]") {
     serializer << person;
     CHECK(sStream.str() == "Mr.Propre");
 }
+
+namespace {
+    struct Currency {
+        int value;
+    };
+    struct Converter {
+        std::string brand;
+        Currency dollars;
+        Currency euros;
+    };
+}
+
+TEST_CASE("aggregate types", "[serialization]") {
+    Converter converter{ "HSBC", { 2 }, { 3 } };
+
+    std::ostringstream sStream;
+    using Serializer = stream_serializer<std::ostringstream>;
+    Serializer serializer{ sStream };
+
+    serializer << converter;
+    CHECK(sStream.str() == "HSBC23");
+}
