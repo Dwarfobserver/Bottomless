@@ -7,7 +7,7 @@
 TEST_CASE("build_info", "[environment]") {
     using namespace std::string_literals;
 
-    if (build::current_mode == build::mode::debug) {
+    if constexpr (build::current_mode == build::mode::debug) {
         CHECK(build::mode_string == "debug"s);
     }
     else {

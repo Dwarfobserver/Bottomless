@@ -12,9 +12,12 @@
 namespace detail {
     template <class F>
     struct deferred {
-        deferred(F&& f) : f_(std::move(f)) {}
-        deferred(F const& f) : f_(f) {}
-        ~deferred() noexcept(noexcept(std::declval<F>()())) { f_(); }
+        deferred(F&& f)      noexcept(std::is_nothrow_move_constructible_v<F>) :
+            f_(std::move(f)) {}
+        deferred(F const& f) noexcept(std::is_nothrow_copy_constructible_v<F>) :
+            f_(f) {}
+        ~deferred()          noexcept(noexcept(std::declval<F>()()))
+            { f_(); }
     private:
         F f_;
     };
@@ -24,3 +27,5 @@ template <class F>
 auto defer(F&& defferedFunction) {
     return detail::deferred<F>{ std::forward<F>(defferedFunction) };
 }
+
+/// TODO Macro defer (with auto name)
