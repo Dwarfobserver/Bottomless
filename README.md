@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/Dwarfobserver/Bottomless.svg?branch=master)](https://travis-ci.org/Dwarfobserver/Bottomless)
+[![GCC Build Status](https://travis-ci.org/Dwarfobserver/Bottomless.svg?branch=master)](https://travis-ci.org/Dwarfobserver/Bottomless) [![MSVC Build Status](https://ci.appveyor.com/api/projects/status/github/Dwarfobserver/Bottomless?svg=true)](https://ci.appveyor.com/project/Dwarfobserver/Bottomless)
 
 # Bottomless
 
