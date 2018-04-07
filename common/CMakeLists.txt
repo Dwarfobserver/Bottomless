@@ -9,7 +9,7 @@ file(GLOB_RECURSE TESTS_SOURCES
 
 set(COMMON_HEADERS
     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-    "${CMAKE_SOURCE_DIR}/dependencies/asio-1.10.8/include")
+    "${CMAKE_SOURCE_DIR}/deps/asio-1.10.8/include")
 set(COMMON_HEADERS ${COMMON_HEADERS} PARENT_SCOPE)
 
 # Make the library

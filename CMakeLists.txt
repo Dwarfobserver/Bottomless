@@ -63,9 +63,26 @@ set(EXECUTABLES_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG   ${EXECUTABLES_DIRECTORY})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${EXECUTABLES_DIRECTORY})
 
+# Set dependencies lib directory name
+
+if(MSVC)
+    set(LIB_DIR "lib-win")
+    set(LIB_EXT "lib")
+else()
+    set(LIB_DIR "lib-unix")
+    set(LIB_EXT "a")
+endif()
+
+# Set dependencies paths
+
+set(CATCH_PATH "${CMAKE_SOURCE_DIR}/deps/catch2")
+set(GLEW_PATH  "${CMAKE_SOURCE_DIR}/deps/glew-2.1.0")
+set(GLFW_PATH  "${CMAKE_SOURCE_DIR}/deps/glfw-3.2.1")
+set(ATT_PATH   "${CMAKE_SOURCE_DIR}/deps/aggregates_to_tuples-1.1.0")
+
 # Add the common code part, the client, the server with their tests
 
-set(TESTS_HEADERS "${CMAKE_SOURCE_DIR}/dependencies/catch2/include")
+set(TESTS_HEADERS "${CMAKE_SOURCE_DIR}/deps/catch2/include")
 
 if (NOT NO_TESTS)
     enable_testing()
